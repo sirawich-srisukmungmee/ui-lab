@@ -1,0 +1,59 @@
+name: Cypress lab and evidence
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cypress-lab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the lab repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: cypress/package-lock.json
+
+      - name: Install the project and Cypress browser
+        working-directory: cypress
+        run: |
+          npm ci
+          npx cypress install
+          npx cypress verify
+          npx cypress info
+
+      - name: Run Cypress evidence and update results
+        shell: pwsh
+        env:
+          CYPRESS_QUICKPIZZA_ADMIN_USERNAME: admin
+          CYPRESS_QUICKPIZZA_ADMIN_PASSWORD: admin
+        run: ./scripts/run-cypress-lab.ps1
+
+      - name: Upload Cypress reports, screenshots, and videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-lab-cypress-evidence
+          path: |
+            cypress/cypress/screenshots
+            cypress/cypress/videos
+            cypress/evidence
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Commit the two passing runs and evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add RESULTS.md cypress/cypress/screenshots cypress/cypress/videos cypress/evidence
+          git diff --cached --quiet && exit 0
+          git commit -m "Record Cypress lab results and evidence"
+          git push origin HEAD:main
