@@ -1,5 +1,5 @@
-// Export-style Java/JUnit test for Selenium IDE Part 1. The canonical editable
-// and executable test is ui-lab.side. Secrets are read from environment vars.
+// Adapted Java/JUnit translation of the Selenium IDE QP-01 customer flow.
+// The editable Selenium IDE project and its runnable test are ui-lab.side.
 import static org.junit.Assert.*;
 
 import java.time.Duration;
@@ -61,7 +61,7 @@ public class QP01customerTest {
     assertEquals("Name: " + pizzaName, nameLine);
     assertFalse(toolLine.contains("Knife"));
     assertTrue(Integer.parseInt(calorieLine.split(":")[1].trim()) <= 600);
-    driver.findElement(By.id("rate-5")).click();
+    driver.findElement(By.name("rate-5")).click();
     assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("rate-result")))
         .getText().contains("Please log in first."));
 
