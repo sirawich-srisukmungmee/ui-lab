@@ -1,77 +1,49 @@
 # UI Lab: Automated UI Testing
 
-This repository contains the individual lab work for ITDS362, using **Selenium IDE** and **Cypress** on the Selenium web form and QuickPizza practice sites. The lab asks students to complete Part 0, Part B, Section 4, and two of Parts 1-4. Part 2 of Project 2 already uses Robot Framework; this lab compares the recorder based Selenium IDE workflow with Cypress.
+Individual ITDS362 lab work for **Part 1: Selenium IDE** and **Part 4: Cypress**. Both tools automate the Selenium practice web form and QP-01 on QuickPizza. The repository also contains the required Part 0 locator notes, Part B reflection, and Section 4 deliverables in `RESULTS.md`.
 
 ## Repository layout
 
-- `selenium-ide/ui-lab.side` - Selenium IDE project with the web form and QP-01 tests.
-- `selenium-ide/QP01customerTest.java` - Java/JUnit export-style version required by the Selenium IDE part.
-- `cypress/e2e/` - Cypress web form and QP-01 specs.
-- `RESULTS.md` - Part 0 locator notes, QP-01, actual run status, evidence index, comparison, and Project 2 carry-over.
-- `evidence/` - retained per-run reports and Cypress videos/screenshots.
+- `selenium-ide/` contains the Selenium IDE `.side` project, the Java/JUnit translation of its QP-01 customer flow, and JSON results from two full runs.
+- `cypress/` is the Cypress project. Its specs and admin login command are under `cypress/`; screenshots and videos from both passing runs are saved under `evidence/` and the normal Cypress output folders.
+- `evidence/` contains the Selenium IDE runner reports and the Cypress run evidence. `RESULTS.md` records the actual run names, outcomes, durations, and reflection.
 
 ## Requirements
 
-- Google Chrome, current stable.
-- Node.js 22 or newer and npm.
-- Firefox with the Selenium IDE add-on 3.17.4 for recording or editing the `.side` file.
-- ChromeDriver matching the installed Chrome major version, placed outside this repository and exposed as `CHROMEDRIVER`.
+- Node.js 24 or newer and npm.
+- Google Chrome and a matching ChromeDriver for Selenium IDE's runner.
+- The QP-01 Cypress admin check uses the shared QuickPizza practice account (`admin` / `admin`). These are practice-site credentials, not a Project 2 staff account. Never replace them with staff credentials or commit private credentials.
 
-Keep ChromeDriver outside the repository. Never commit staff credentials, `.env` files, browser profiles, or tokens.
+## Run Part 1: Selenium IDE
 
-## Setup
-
-```powershell
-npm install
-$env:CYPRESS_CACHE_FOLDER = (Join-Path (Get-Location) '.cache\cypress')
-npx cypress install
-```
-
-Install the Selenium IDE runner for the IDE part:
-
-```powershell
-npm install --global selenium-side-runner@4.0.13
-```
-
-Set `CHROMEDRIVER` to the full path of the matching driver in the current PowerShell session. For example:
+From the repository root in Windows PowerShell, set the matching driver path, then run both tests:
 
 ```powershell
 $env:CHROMEDRIVER = 'C:\drivers\chromedriver-win64\chromedriver.exe'
-$env:PATH = (Split-Path $env:CHROMEDRIVER) + ';' + $env:PATH
+$env:Path = (Split-Path $env:CHROMEDRIVER) + ';' + $env:Path
+npx --yes selenium-side-runner@4.0.13 --capabilities 'goog:chromeOptions.args=[headless,no-sandbox,disable-dev-shm-usage]' --jest-options '"--forceExit"' selenium-ide/ui-lab.side
 ```
 
-The Cypress QP-01 test signs in to the shared practice site's admin page after creating its pizza. Supply the practice account values through environment variables; do not put them in source files or commit output containing them:
+The `.side` project runs the web form and QP-01 steps 1-5. Each QP-01 run creates one uniquely named practice pizza. The two recorded JSON reports are in `evidence/selenium-ide/run1/` and `run2/`.
+
+## Run Part 4: Cypress
+
+From the `cypress/` directory:
 
 ```powershell
-$env:QUICKPIZZA_ADMIN_USERNAME = '<course-provided-practice-user>'
-$env:QUICKPIZZA_ADMIN_PASSWORD = '<course-provided-practice-password>'
-$env:CYPRESS_QUICKPIZZA_ADMIN_USERNAME = $env:QUICKPIZZA_ADMIN_USERNAME
-$env:CYPRESS_QUICKPIZZA_ADMIN_PASSWORD = $env:QUICKPIZZA_ADMIN_PASSWORD
+npm ci
+$env:CYPRESS_CACHE_FOLDER = (Join-Path (Get-Location) '.cache\cypress')
+npx cypress install
+$env:CYPRESS_QUICKPIZZA_ADMIN_USERNAME = 'admin'
+$env:CYPRESS_QUICKPIZZA_ADMIN_PASSWORD = 'admin'
+npx cypress run --browser chrome
+npx cypress run --browser chrome
 ```
 
-Enter the course-provided shared-practice account values locally. Do not put them in a source file, commit a `.env` file, or include a Project 2 staff password in this repository.
+Cypress records the QP-01 screenshots and videos. Its test reads the shared practice credentials from `CYPRESS_QUICKPIZZA_ADMIN_USERNAME` and `CYPRESS_QUICKPIZZA_ADMIN_PASSWORD`; set each to `admin` for the public QuickPizza practice site. The Cypress 16 test uses `cy.env()` and does not print the password in the command log.
 
-## Run
-
-Selenium IDE automates QP-01 steps 1-5; Cypress automates steps 1-7, including the Admin check. Run each suite twice, one command at a time. QP-01 creates a new pizza each time, so use the generated `Lab Pizza YYYYMMDD-HHMMSS` name to distinguish runs. Do not run in a loop and do not use the practice site's Clear Ratings control.
-
-```powershell
-npx cypress run --browser chrome --config videosFolder=evidence/cypress/run1/videos,screenshotsFolder=evidence/cypress/run1/screenshots
-npx cypress run --browser chrome --config videosFolder=evidence/cypress/run2/videos,screenshotsFolder=evidence/cypress/run2/screenshots
-selenium-side-runner --output-directory evidence/selenium-ide/run1 selenium-ide/ui-lab.side
-selenium-side-runner --output-directory evidence/selenium-ide/run2 selenium-ide/ui-lab.side
-```
-
-For browser headed evidence, use:
-
-```powershell
-npx cypress run --browser chrome --headed
-```
-
-Cypress stores screenshots and videos under `evidence/cypress/`; the Selenium IDE runner writes JSON reports under `evidence/selenium-ide/`. Run the suites only the stated two times and note the generated pizza names and times in `RESULTS.md`.
+This computer's Cypress 16.2.1 executable failed its Windows startup smoke test. To produce the required Cypress run evidence without changing the tests, use **Actions → Cypress lab and evidence → Run workflow** in the public GitHub repository. The manual workflow runs the Step 4.3 wrong-title check, runs the full specs twice, saves the videos and screenshots, updates `RESULTS.md`, and commits the resulting evidence.
 
 ## Safety and data
 
-The tests use only the lab's shared practice sites. QP-01 creates a synthetic pizza recommendation with a unique name; repeated runs create additional practice data. The tests do not clear ratings, submit a payment, or use the Project 2 application. The web-form spec submits only the lab's sample form.
-
-See [`RESULTS.md`](RESULTS.md) for the test steps, expected outcomes, locator notes, and the framework comparison.
+QP-01 creates one synthetic pizza on the shared practice site per run. Run the required two times per tool, one run at a time. The tests do not use Clear Ratings, a payment flow, or the Project 2 application. Read `RESULTS.md` for the step-by-step test case, locator notes, actual outcomes, evidence, and comparison.

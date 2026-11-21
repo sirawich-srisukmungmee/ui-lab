@@ -1,28 +1,20 @@
-# JavaScript dependencies
+# Libraries and tool output
 node_modules/
-.cache/cypress/
-
-# Cypress generated files
-cypress/downloads/
-cypress/screenshots/
-cypress/videos/
-cypress/results/
-
-# Selenium IDE runner output
-selenium-ide/results/
+target/
+.venv/
+__pycache__/
+cypress/cypress/downloads/
+cypress/.cache/
 
 # Local environment files and secrets
 .env
 .env.*
 !.env.example
 
-# Browser drivers and build output
-target/
+# Browser drivers and editor files
 drivers/
-work/
-
-# OS/editor files
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+cypress/.cache/
