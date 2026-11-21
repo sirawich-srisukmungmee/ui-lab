@@ -1,0 +1,68 @@
+{
+  "id": "e1d34fe3-31f8-4f31-8e4b-a9ea2d971201",
+  "version": "2.0",
+  "name": "ui-lab",
+  "url": "https://quickpizza.grafana.com",
+  "tests": [
+    {
+      "id": "a0d93d12-c083-4694-97a4-e8a75b5d11ce",
+      "name": "web form",
+      "commands": [
+        { "id": "ce100001-0000-4000-a000-000000000001", "comment": "Open the Selenium practice form.", "command": "open", "target": "https://www.selenium.dev/selenium/web/web-form.html", "value": "" },
+        { "id": "ce100001-0000-4000-a000-000000000002", "comment": "Wait for the page heading.", "command": "waitForElementVisible", "target": "css=h1", "value": "10000" },
+        { "id": "ce100001-0000-4000-a000-000000000003", "comment": "Assert the expected form page.", "command": "assertText", "target": "css=h1", "value": "Web form" },
+        { "id": "ce100001-0000-4000-a000-000000000004", "comment": "Enter text in the identified input.", "command": "type", "target": "id=my-text-id", "value": "Hello Selenium" },
+        { "id": "ce100001-0000-4000-a000-000000000005", "comment": "Select the option by its label.", "command": "select", "target": "name=my-select", "value": "label=Two" },
+        { "id": "ce100001-0000-4000-a000-000000000006", "comment": "Submit the form.", "command": "click", "target": "css=button[type='submit']", "value": "" },
+        { "id": "ce100001-0000-4000-a000-000000000007", "comment": "Wait for the result, then assert it.", "command": "waitForElementVisible", "target": "id=message", "value": "10000" },
+        { "id": "ce100001-0000-4000-a000-000000000008", "comment": "Check the form result.", "command": "assertText", "target": "id=message", "value": "Received!" }
+      ]
+    },
+    {
+      "id": "a0d93d12-c083-4694-97a4-e8a75b5d11cf",
+      "name": "QP-01 customer",
+      "commands": [
+        { "id": "ce100002-0000-4000-a000-000000000001", "comment": "Step 1: open QuickPizza and wait for its heading.", "command": "open", "target": "/", "value": "" },
+        { "id": "ce100002-0000-4000-a000-000000000002", "comment": "Step 1: wait for the rendered heading.", "command": "waitForElementVisible", "target": "css=h1", "value": "10000" },
+        { "id": "ce100002-0000-4000-a000-000000000003", "comment": "Step 1: assert the heading.", "command": "assertText", "target": "css=h1", "value": "Looking to break out of your pizza routine?" },
+        { "id": "ce100002-0000-4000-a000-000000000004", "comment": "Step 2: reveal the advanced fields.", "command": "click", "target": "xpath=//label[normalize-space()='Advanced']", "value": "" },
+        { "id": "ce100002-0000-4000-a000-000000000005", "comment": "Step 2: wait for the calories field.", "command": "waitForElementVisible", "target": "xpath=//label[normalize-space()='Max Calories per Slice']/../input", "value": "10000" },
+        { "id": "ce100002-0000-4000-a000-000000000006", "comment": "Step 2: wait for the excluded-tools select.", "command": "waitForElementVisible", "target": "css=select", "value": "10000" },
+        { "id": "ce100002-0000-4000-a000-000000000007", "comment": "Step 2: wait for the vegetarian checkbox.", "command": "waitForElementVisible", "target": "id=default-checkbox", "value": "10000" },
+        { "id": "ce100002-0000-4000-a000-000000000008", "comment": "Step 2: wait for the custom name field.", "command": "waitForElementVisible", "target": "css=input#pizza-name", "value": "10000" },
+        { "id": "ce100002-0000-4000-a000-000000000009", "comment": "Generate a unique name per run.", "command": "executeScript", "target": "const d = new Date(); const two = (n) => String(n).padStart(2, '0'); const day = d.getFullYear() + two(d.getMonth() + 1) + two(d.getDate()); const time = two(d.getHours()) + two(d.getMinutes()) + two(d.getSeconds()); return 'Lab Pizza ' + day + '-' + time;", "value": "pizzaName" },
+        { "id": "ce100002-0000-4000-a000-000000000010", "comment": "Print the generated test-data name.", "command": "echo", "target": "${pizzaName}", "value": "" },
+        { "id": "ce100002-0000-4000-a000-000000000011", "comment": "Step 3: set the maximum calories.", "command": "type", "target": "xpath=//label[normalize-space()='Max Calories per Slice']/../input", "value": "600" },
+        { "id": "ce100002-0000-4000-a000-000000000012", "comment": "Step 3: exclude Knife.", "command": "addSelection", "target": "css=select", "value": "label=Knife" },
+        { "id": "ce100002-0000-4000-a000-000000000013", "comment": "Step 3: require a vegetarian recommendation.", "command": "click", "target": "id=default-checkbox", "value": "" },
+        { "id": "ce100002-0000-4000-a000-000000000014", "comment": "Step 3: enter the unique pizza name.", "command": "type", "target": "css=input#pizza-name", "value": "${pizzaName}" },
+        { "id": "ce100002-0000-4000-a000-000000000015", "comment": "Verify the calories value.", "command": "assertValue", "target": "xpath=//label[normalize-space()='Max Calories per Slice']/../input", "value": "600" },
+        { "id": "ce100002-0000-4000-a000-000000000016", "comment": "Verify that Knife is excluded.", "command": "assertSelectedLabel", "target": "css=select", "value": "Knife" },
+        { "id": "ce100002-0000-4000-a000-000000000017", "comment": "Verify the vegetarian restriction.", "command": "assertChecked", "target": "id=default-checkbox", "value": "" },
+        { "id": "ce100002-0000-4000-a000-000000000018", "comment": "Verify the custom name.", "command": "assertValue", "target": "css=input#pizza-name", "value": "${pizzaName}" },
+        { "id": "ce100002-0000-4000-a000-000000000019", "comment": "Step 4: request a pizza.", "command": "click", "target": "name=pizza-please", "value": "" },
+        { "id": "ce100002-0000-4000-a000-000000000020", "comment": "Wait for the recommendation name.", "command": "waitForElementVisible", "target": "xpath=//p[starts-with(.,'Name:')]", "value": "10000" },
+        { "id": "ce100002-0000-4000-a000-000000000021", "comment": "Verify the generated name.", "command": "assertText", "target": "xpath=//p[starts-with(.,'Name:')]", "value": "Name: ${pizzaName}" },
+        { "id": "ce100002-0000-4000-a000-000000000022", "comment": "Verify that Knife is not recommended.", "command": "assertNotText", "target": "xpath=//p[starts-with(.,'Tool:')]", "value": "Knife" },
+        { "id": "ce100002-0000-4000-a000-000000000023", "comment": "Check the calories-per-slice limit.", "command": "executeScript", "target": "const p = [...document.querySelectorAll('p')].find((e) => e.textContent.startsWith('Calories per slice:')); return parseInt(p.textContent.split(':')[1], 10) <= 600;", "value": "caloriesOk" },
+        { "id": "ce100002-0000-4000-a000-000000000024", "comment": "Fail unless the recommendation meets the calorie limit.", "command": "assert", "target": "caloriesOk", "value": "true" },
+        { "id": "ce100002-0000-4000-a000-000000000025", "comment": "Save the recommended tool for the Admin check.", "command": "storeText", "target": "xpath=//p[starts-with(.,'Tool:')]", "value": "toolLine" },
+        { "id": "ce100002-0000-4000-a000-000000000026", "comment": "Step 5: try to rate without logging in.", "command": "click", "target": "id=rate-5", "value": "" },
+        { "id": "ce100002-0000-4000-a000-000000000027", "comment": "Step 5: wait for the login prompt.", "command": "waitForElementVisible", "target": "id=rate-result", "value": "10000" },
+        { "id": "ce100002-0000-4000-a000-000000000028", "comment": "Step 5: assert the prompt.", "command": "assertText", "target": "id=rate-result", "value": "Please log in first." }
+      ]
+    }
+  ],
+  "suites": [
+    {
+      "id": "7df548fa-d70f-4f30-8414-07d4234c3037",
+      "name": "Default Suite",
+      "persistSession": false,
+      "parallel": false,
+      "timeout": 300,
+      "tests": ["a0d93d12-c083-4694-97a4-e8a75b5d11ce", "a0d93d12-c083-4694-97a4-e8a75b5d11cf"]
+    }
+  ],
+  "urls": ["https://www.selenium.dev/", "https://quickpizza.grafana.com/"],
+  "plugins": []
+}
