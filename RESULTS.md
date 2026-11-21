@@ -43,12 +43,12 @@ Tool parts chosen: **Part 1: Selenium IDE** and **Part 4: Cypress**.
 ## Part 4: Cypress
 
 - Node.js: v24.11.0; npm: 11.6.2; Cypress: 16.2.1.
-- Step 4.3 wrong-title failure: [32m+'Wrong form - target page'[0m
+- Step 4.3 wrong-title failure: failed as expected. Cypress reported expected title `Web form - target page`, received `Wrong form - target page` (1 test failed, 0 passed); screenshot and runner output retained in `cypress/evidence/lesson-step-4.3/`.
 - Step 4.6: the test intercepts `POST /api/pizza`, checks status 200 and that the request carries `maxCaloriesPerSlice: 600`, then compares the page's tool and calories with the API response.
 - Step 4.7: the same test signs in on `/admin` and checks the new pizza line contains the same tool as the recommendation.
-- Step 4.8 run 1: PASS (2 specs, 2 tests); 14.4s; Lab Pizza 20261121-181850; API tool Scissors, 400 calories.
-- Step 4.8 run 2: PASS (2 specs, 2 tests); 14.1s; Lab Pizza 20261121-181905; API tool Scissors, 525 calories.
-- Cypress evidence folders will be populated by the hosted workflow after it runs.
+- Step 4.8 run 1: PASS (2 specs, 2 tests); 14.4 s; `Lab Pizza 20261121-181850`; API tool Scissors, 400 calories per slice; vegetarian true; request max 600.
+- Step 4.8 run 2: PASS (2 specs, 2 tests); 14.1 s; `Lab Pizza 20261121-181905`; API tool Scissors, 525 calories per slice; vegetarian true; request max 600.
+- Cypress evidence from both runs is retained in `cypress/evidence/run1/` and `run2/`, plus Cypress screenshots and videos in `cypress/cypress/screenshots/` and `cypress/cypress/videos/`. The Step 4.3 failure screenshot and output are in `cypress/evidence/lesson-step-4.3/`.
 - Step 4.9 (optional): not run; the required runs use Chrome.
 - Environment note: Cypress 16.2.1's Windows executable exited during its local smoke test in this managed environment. The committed workflow uses a hosted Ubuntu/Chrome runner to execute the same tests and retain their evidence.
 
@@ -60,7 +60,7 @@ Tool parts chosen: **Part 1: Selenium IDE** and **Part 4: Cypress**.
 
 3. **How could the test check vegetarian?** It could assert that the `vegetarian` field in the `POST /api/pizza` response is `true`, and compare that value with the submitted checkbox. To verify the actual ingredients are vegetarian rather than trusting a server flag, the test would also need the page to expose ingredients or an independent ingredient classification source.
 
-4. **How did the tools wait, author, and report QP-01?** The Selenium IDE project uses explicit `wait for element visible` commands before checking QuickPizza's delayed content; its runner JSON and terminal output show each test and command failure. Cypress retries queries and assertions, and `cy.intercept` waits for the API response without a fixed pause; its command log, videos, and screenshots make the full customer-to-admin flow visible. The Selenium QP-01 steps took about 5.5 seconds in each passing run; Cypress run times and pizza names are pending hosted workflow execution.
+4. **How did the tools wait, author, and report QP-01?** The Selenium IDE project uses explicit `wait for element visible` commands before checking QuickPizza's delayed content; its runner JSON and terminal output show each test and command failure. Cypress retries queries and assertions, and `cy.intercept` waits for the API response without a fixed pause; its command log, videos, and screenshots make the full customer-to-admin flow visible. The Selenium QP-01 steps took about 5.5 seconds in each passing run; Cypress QP-01 steps took 14.4 s and 14.1 s in the two passing runs.
 
 5. **Which tool fits Project 2?** Cypress is my choice because the test can compare the submitted request and server response with what the page displays, which catches faults that a click-only test misses. Its custom `adminLogin` command also keeps the staff/customer transition reusable, while screenshots and video retain a readable full-run record.
 
@@ -71,4 +71,3 @@ Tool parts chosen: **Part 1: Selenium IDE** and **Part 4: Cypress**.
 ## Section 5: Project 2 carry-over
 
 The lab's QP-01 mapping carries over to a project system test: write expected results for every step, use stable locators and waits, and compare the same created record across customer and staff views. The synthetic pizza name demonstrates a timestamped test-data convention, while the screenshots and video demonstrate full-run evidence. Project 2 staff passwords must remain in environment variables and out of code, logs, and videos.
-
