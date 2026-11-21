@@ -43,11 +43,11 @@ Tool parts chosen: **Part 1: Selenium IDE** and **Part 4: Cypress**.
 ## Part 4: Cypress
 
 - Node.js: v24.11.0; npm: 11.6.2; Cypress: 16.2.1.
-- Step 4.3 wrong-title failure: <!-- CYPRESS STEP 4.3 -->
+- Step 4.3 wrong-title failure: [32m+'Wrong form - target page'[0m
 - Step 4.6: the test intercepts `POST /api/pizza`, checks status 200 and that the request carries `maxCaloriesPerSlice: 600`, then compares the page's tool and calories with the API response.
 - Step 4.7: the same test signs in on `/admin` and checks the new pizza line contains the same tool as the recommendation.
-- Step 4.8 run 1: <!-- CYPRESS RUN 1 -->
-- Step 4.8 run 2: <!-- CYPRESS RUN 2 -->
+- Step 4.8 run 1: PASS (2 specs, 2 tests); 14.4s; Lab Pizza 20261121-181850; API tool Scissors, 400 calories.
+- Step 4.8 run 2: PASS (2 specs, 2 tests); 14.1s; Lab Pizza 20261121-181905; API tool Scissors, 525 calories.
 - Cypress evidence folders will be populated by the hosted workflow after it runs.
 - Step 4.9 (optional): not run; the required runs use Chrome.
 - Environment note: Cypress 16.2.1's Windows executable exited during its local smoke test in this managed environment. The committed workflow uses a hosted Ubuntu/Chrome runner to execute the same tests and retain their evidence.
@@ -71,3 +71,4 @@ Tool parts chosen: **Part 1: Selenium IDE** and **Part 4: Cypress**.
 ## Section 5: Project 2 carry-over
 
 The lab's QP-01 mapping carries over to a project system test: write expected results for every step, use stable locators and waits, and compare the same created record across customer and staff views. The synthetic pizza name demonstrates a timestamped test-data convention, while the screenshots and video demonstrate full-run evidence. Project 2 staff passwords must remain in environment variables and out of code, logs, and videos.
+
