@@ -1,0 +1,28 @@
+# JavaScript dependencies
+node_modules/
+.cache/cypress/
+
+# Cypress generated files
+cypress/downloads/
+cypress/screenshots/
+cypress/videos/
+cypress/results/
+
+# Selenium IDE runner output
+selenium-ide/results/
+
+# Local environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Browser drivers and build output
+target/
+drivers/
+work/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
